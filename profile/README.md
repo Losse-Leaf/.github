@@ -69,8 +69,8 @@ graph LR
 
 | 仓库 | 定位与职责 | 技术栈 | 状态 |
 | :--- | :--- | :--- | :---: |
-| **[`Losse-Leaf/backend`](https://github.com/Losse-Leaf/backend)** | **后端数据中枢与单二进制分发引擎**<br/>提供 RESTful API v1、母子设备令牌鉴权、SQLite WAL 持久化、R2 预签名引擎及内嵌 Web 静态服务 | `Go` · `Gin` · `GORM` · `SQLite` · `Cloudflare R2` | [`v1.0.0`](https://github.com/Losse-Leaf/backend/releases) |
-| **[`Losse-Leaf/web`](https://github.com/Losse-Leaf/web)** | **Web 官方展厅与后台管理终端**<br/>纸墨与暗房双主题、全自研纸本表单控件、六大业务视图与 Web Audio 拟物声学引擎 | `Vue 3` · `TypeScript` · `Vite` · `Tailwind CSS 4` | [`v1.0.0`](https://github.com/Losse-Leaf/web/releases) |
+| **[`Losse-Leaf/backend`](https://github.com/Losse-Leaf/backend)** | **后端数据中枢与单二进制分发引擎**<br/>提供 RESTful API v1、母子设备令牌鉴权、SQLite WAL 持久化、R2 预签名引擎及内嵌 Web 静态服务 | `Go` · `Gin` · `GORM` · `SQLite` · `Cloudflare R2` | [`v1.1.0`](https://github.com/Losse-Leaf/backend/releases) |
+| **[`Losse-Leaf/web`](https://github.com/Losse-Leaf/web)** | **Web 官方展厅与后台管理终端**<br/>纸墨与暗房双主题、全自研纸本表单控件、六大业务视图与 Web Audio 拟物声学引擎 | `Vue 3` · `TypeScript` · `Vite` · `Tailwind CSS 4` | [`v1.1.0`](https://github.com/Losse-Leaf/web/releases) |
 ---
 
 ## 四、极速启动 (Quick Start)
