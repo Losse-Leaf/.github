@@ -1,0 +1,58 @@
+name: 数据同步与设备配对问题 (Sync & Pairing Issue)
+description: 反馈多端数据同步延迟、发件箱事件积压或设备扫码配对异常
+title: "[Sync]: "
+labels: ["sync", "network", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        本模版专门用于诊断多端受信任设备配对、离线发件箱同步（Outbox）或游标对齐故障。
+        请注意：描述中严禁使用任何 Emoji 表情符号。
+  - type: dropdown
+    id: client_type
+    attributes:
+      label: 出现同步问题的客户端 (Client Affected)
+      options:
+        - "Android 随行端"
+        - "macOS 桌面工作台"
+        - "Web 官方展厅"
+        - "多端相互冲突"
+    validations:
+      required: true
+  - type: input
+    id: backend_version
+    attributes:
+      label: 后端中枢版本 (Backend Version)
+      placeholder: "例如: v1.5.1"
+    validations:
+      required: true
+  - type: input
+    id: network_topology
+    attributes:
+      label: 网络环境拓扑 (Network Topology)
+      description: 例如：同一局域网 Wi-Fi 直连 / Tailscale 异地组网 / 公网 HTTPS + Cloudflare
+      placeholder: "例如: 公网 HTTPS (反向代理 :443 -> :8088)"
+    validations:
+      required: true
+  - type: textarea
+    id: symptom
+    attributes:
+      label: 异常现象与报错信息 (Symptom & Error Toast)
+      description: 界面弹出的具体错误纸签文案（如：401 未授权、连接数据中枢失败、待同步事件常驻不减等）
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostic_info
+    attributes:
+      label: 诊断信息或日志 (Diagnostic Logs)
+      description: 移动端「展台」中的待同步计数、Logcat 过滤标签或后端日志
+      render: text
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 确认自查
+      options:
+        - label: 我已确认报告内容严格遵守零 Emoji 规范
+          required: true
+        - label: 我已确认配对二维码未超过 5 分钟有效时限
+          required: true

@@ -1,0 +1,80 @@
+name: 缺陷报告 (Bug Report)
+description: 提交在使用《散页》过程中遇到的异常、崩溃或非预期行为
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢协助完善《散页》。在提交缺陷前，请确认已检索过现有 Issue 且问题在最新版本中依然复现。
+        请注意：描述中严禁使用任何 Emoji 表情符号。
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: 发生缺陷的子系统 (Subsystem)
+      description: 请选择问题发生的端或模块
+      options:
+        - "后端中枢 (Backend - Go / SQLite)"
+        - "Web 官方展厅 (Web - Vue 3 / Vite)"
+        - "macOS 桌面工作台 (macOS - SwiftUI)"
+        - "Android 随行端 (Android - Jetpack Compose)"
+        - "全平台文档与规范 (Docs)"
+        - "其他 / 跨端协同 (Cross-Platform)"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 软件版本与构建号 (Version / Build)
+      description: 例如：Android v1.8.4 (build 47) / macOS v2.4.2 / Backend v1.5.1
+      placeholder: "例如: Android v1.8.4 (build 47)"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境与设备型号 (Environment / Device)
+      description: 例如：Pixel 8 Pro (Android 15) / MacBook Pro M3 (macOS 15.1) / Ubuntu 24.04 (VPS)
+      placeholder: "例如: Pixel 8 Pro (Android 15)"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤 (Steps to Reproduce)
+      description: 请详细列出导致异常的明确步骤
+      placeholder: |
+        1. 进入「时间流」页面
+        2. 点击悬浮按钮添加记录
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为 (Expected Behavior)
+      description: 依照设计规范，正常情况下系统应表现为何种状态
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为与错误现象 (Actual Behavior)
+      description: 实际出现的异常、无响应、白屏或错误纸签提示
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志或调用栈 (Logs / Stacktrace)
+      description: 请贴出 Logcat、浏览器控制台或后端服务标准输出中的错误日志
+      render: text
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 确认自查
+      options:
+        - label: 我已确认上述报告中严格遵循零 Emoji 规范
+          required: true
+        - label: 我已确认问题在对应端的最新正式版本中依然复现
+          required: true
