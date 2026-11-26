@@ -13,18 +13,20 @@
 
 我们对待每一行代码，如同手工装订实体刊物般克制与严谨。我们欢迎所有认同这一愿景的工程师、设计师与文字创作者参与雕琢。在着手编写代码或发起 PR 之前，请务必阅读本指南，理解并践行我们的核心工程约定。
 
+> **规范的唯一权威在 [`Losse-Leaf/docs`](https://github.com/Losse-Leaf/docs)。** 本指南只作转述与落地指引，若两者出现分歧，一律以 `docs/README.md` §四「跨端工程约定」为准。
+
 ---
 
 ## 二、生态仓库与职责矩阵
 
-《散页》由一个统一的数据中枢与三大核心终端构成，各仓库边界清晰、权责明确：
+《散页》由一个统一的数据中枢、统一认证中心与三大核心终端构成，各仓库边界清晰、权责明确：
 
 | 仓库名称 | 技术栈 | 职责定位与核心特性 |
 | :--- | :--- | :--- |
-| **[`Losse-Leaf/backend`](https://github.com/Losse-Leaf/backend)** | Go / Gin / SQLite / R2 | **单一事实来源 (SSOT) & 单二进制分发引擎**<br/>RESTful API v1、母子设备令牌鉴权体系、内嵌 Web 前端、CatmullRom 缩略图服务、纯 Go 无 CGO 依赖。 |
-| **[`Losse-Leaf/web`](https://github.com/Losse-Leaf/web)** | Vue 3 / TS / Tailwind CSS 4 | **Web 官方展厅与后台管理端**<br/>纸墨与暗房双主题、微噪点滤镜、六大业务卷宗、Web Audio 拟物声学引擎、Composable 单例状态驱动。 |
-| **[`Losse-Leaf/MacOS`](https://github.com/Losse-Leaf/MacOS)** | Swift 6 / SwiftUI / AppKit | **桌面无感伴随工作台**<br/>Menubar 常驻快速捕捉 Popover、全局快捷键 (`Cmd+Shift+L`)、朋友圈式紧凑时间戳、受保护本地凭据档案 (`0600`)。 |
-| **[`Losse-Leaf/Android`](https://github.com/Losse-Leaf/Android)** | Kotlin / Compose / Room | **随行第一现场口袋暗房与记账本**<br/>触觉大键位记账键盘、端侧 EXIF 智能压制、离线优先发件箱 (Outbox Engine)、生物识别安全门禁。 |
+| **[`Losse-Leaf/backend`](https://github.com/Losse-Leaf/backend)** | Go / Gin / GORM / SQLite / R2 | **单一事实来源 (SSOT) & 单二进制分发引擎**<br/>RESTful API v1、设备令牌与 Vesper Auth 统一认证接入、SQLite WAL 持久化、本地主存储与 R2 / AList 灾备、服务端缩略图、内嵌 Web 前端、纯 Go 无 CGO 依赖。 |
+| **[`Losse-Leaf/web`](https://github.com/Losse-Leaf/web)** | Vue 3 / TS / Vite / Tailwind CSS 4 | **Web 官方展厅与后台管理端**<br/>纸墨与暗房双主题、微噪点滤镜、六大业务卷宗、全站唯一全量管理中枢（模块公开开关、分类字典、资产校准、信贷渠道、年度年鉴）。 |
+| **[`Losse-Leaf/MacOS`](https://github.com/Losse-Leaf/MacOS)** | Swift 6 / SwiftUI / AppKit | **桌面无感伴随工作台**<br/>Menubar 常驻快速捕捉 Popover、全局快捷键 (`Cmd+Shift+L`)、朋友圈式紧凑时间戳、受保护本地凭据档案 (`0600`)、拖拽传图与本地发件箱。 |
+| **[`Losse-Leaf/Android`](https://github.com/Losse-Leaf/Android)** | Kotlin / Compose / Room / WorkManager | **随行第一现场口袋暗房与记账本**<br/>触觉大键位记账键盘、自然语义快记、通知监听自动记账、端侧 EXIF 智能压制、离线优先发件箱 (Outbox Engine)、生物识别安全门禁。 |
 | **[`Losse-Leaf/docs`](https://github.com/Losse-Leaf/docs)** | Markdown / Mermaid | **全平台架构规范与工程专著**<br/>生态演进蓝图、跨端设计系统映射、接口详细契约、整改总台账。 |
 | **[`Losse-Leaf/.github`](https://github.com/Losse-Leaf/.github)** | Community Health | **组织级配置与社区健康中心**<br/>全组织默认社区规范、贡献指南、安全政策、Issue / PR 模版。 |
 
@@ -32,10 +34,10 @@
 
 ## 三、跨端核心工程约定 (Core Tenets)
 
-无论面向哪一个平台实现，所有贡献者**必须严格遵守**以下七大黄金法则：
+无论面向哪一个平台实现，所有贡献者**必须严格遵守**以下十条黄金法则（权威定义见 [`docs/README.md`](https://github.com/Losse-Leaf/docs) §四）：
 
 ### 1. 单一事实来源 (Single Source of Truth, SSOT)
-- 后端 SQLite 数据库是全局数据的唯一权威。
+- 后端数据库是全局数据的唯一权威。
 - 客户端的本地数据库（如 Android 的 Room、macOS 的本地存储）仅作为**高性能只读缓存**与**离线待同步发件箱**，不可在本地擅自篡改服务端的权威状态。
 
 ### 2. 金额严格以整数分流转与计算 (Cents Precision)
@@ -45,31 +47,50 @@
 
 ### 3. 弹性时间解析与中国北京时间基准 (FlexTime UTC+8)
 - 服务端支持弹性解析多种时间输入格式（ISO8601、RFC3339、纸本点号格式 `YYYY.MM.DD HH:mm`）。
-- **时区权威基准统一为中国北京时间（UTC+8）**。凡不带时区后缀的时间字符串一律按北京时间解释。客户端展示端无论用户设备处于何种本地时区，均还原为北京时间对齐呈现，确保跨时区与海外部署零漂移。
+- **时区权威基准统一为中国北京时间（UTC+8）**。凡不带时区后缀的时间字符串一律按北京时间解释；客户端展示端无论用户设备处于何种本地时区，均还原为北京时间对齐呈现，确保跨时区与海外部署零漂移。
+- 前端走 `web/src/utils/format.ts` 的解析工具，Android 统一走 `FormatUtils.BeijingZone`，**禁止**直接调用浏览器或系统本地时区 getter。
 
-### 4. 实体书与银盐暗房质感 (Paper & Film Aesthetic)
+### 4. 媒体上传双通道
+- **Web**：只走 `POST /api/v1/files/upload`（multipart），不直连对象存储。
+- **原生端**：预签名直传（`/uploads/presign` → PUT → `/uploads/complete`），避免大文件经应用服务器中转。
+- 两端都只向业务表写入相对 `object_key`，读取时由后端下发签名 URL。
+
+### 5. 实体书与银盐暗房质感 (Paper & Film Aesthetic)
 - 界面视觉严格遵从自然大地色盘（棉纸底色、深暖墨黑、暖赭石、苔藓绿等），严禁出现冰冷的高反差、塑料渐变或荧光霓虹特效。
-- 各客户端 UI 代码中**严禁硬编码十六进制颜色字面量**，所有颜色必须引用各平台设计令牌（Semantic Tokens）。
+- 各客户端 UI 代码中**严禁硬编码十六进制颜色字面量**，所有颜色必须引用各平台设计令牌（Semantic Tokens）；原生端须使用与 Web 同名的语义令牌绑定。
+- 声学引擎已在四端整体下线，质感由视觉与触觉承担；原生端不得申请音频焦点或持有音效资源。
 
-### 5. 离线优先发件箱模式 (Offline-First Outbox Pattern)
+### 6. 离线优先发件箱模式 (Offline-First Outbox Pattern)
 - 原生端（macOS 与 Android）必须具备断网环境下无阻碍记录闪念与记账的能力。
-- 本地变动先以事件形式进入本地 Outbox 队列，网络连通后按严格时序后台静默同步至服务端。
-
-### 6. 记录为一切的母体 (Record-First Architecture)
-- 生命没有孤立的足迹库或造物库。所有足迹、造物、心愿、记账行为均溯源于一级发生的真实生活记录（`LifeEntry`）。
-- 从二级视界（如足迹打卡、开启造物）录入时，必须自动伴生创建对应的一级条目并写入主时间流；时间流记录带有地理或造物标签时，下游视图自动收录，拒绝数据孤岛。
+- 本地变动先以事件形式进入本地 Outbox 队列，网络连通后按严格时序后台静默同步至服务端；失败事件不得静默丢弃。
 
 ### 7. 工程质量与零债务准则 (Engineering Quality)
-- **不留过渡兼容层**：项目处于快速演进期，严禁为历史临时格式或废弃接口保留冗余分支。
-- **零冗余死字段**：模型中的字段必须有明确的写入方与读取方，禁止仅用于伪造示例的冗余定义。
+- **低耦合、高内聚**：模块边界清晰，跨端共享的是数据契约而非实现。
+- **高复用、拒绝重复实现**：同一逻辑只允许一份实现，出现第二份必须合并。
+- **不留过渡兼容层**：项目处于快速演进期，严禁为历史临时格式或废弃接口保留冗余分支、双轨路由或迁移代码。
+- **零冗余字段**：模型中的字段必须有明确的写入方与读取方，禁止仅用于伪造示例的冗余定义。
+- **禁止假数据兜底**：错误不得静默吞掉，不得以伪造数据掩盖失败。
 - **严格零 Emoji 规范**：为了保持《散页》典雅、克制、书卷气的整体风格，无论是代码注释、Git 提交信息、UI 文案还是系统提示，**一律严禁出现 Emoji 表情符号**。
+
+### 8. 记录为一切的母体 (Record-First Architecture)
+- 生命没有孤立的足迹库或造物库。所有足迹、造物、心愿、记账行为均溯源并伴生于一级发生的真实生活记录（`LifeEntry`）。
+- 从二级视界（如足迹打卡、开启造物）录入时，必须自动伴生创建对应的一级条目并写入主时间流；时间流记录带有地理或造物标签时，下游视图自动收录，拒绝数据孤岛。
+
+### 9. 隐私与可见性分层 (Privacy by Default)
+- **默认全站私有**：未登录访客默认不可访问任何业务数据。
+- **模块级公开开关**：主理人仅在 Web 后台可按模块开启对外只读展厅；记账流水、资产大盘、信贷分期渠道、设备管理、存储灾备等模块**永不开放**。
+- **单条私密兜底**：即便模块已公开，单条记录仍可标记「仅自己可见」；私密记录对访客彻底不可见，不计入公开统计、聚合与公开 `ETag`。
+
+### 10. 统一契约与原生端减法边界
+- **单一契约源**：实体字段、枚举值、破坏性三态规则、行政区划城市字典与离线发件箱同步状态机必须以统一契约为准，四端严格对齐，禁止各端自行发明变体语义。
+- **低频重管理收归 Web**：信贷分期渠道 CRUD、分类字典管理、资产校准、完整年鉴与模块公开配置统一由 Web 承担；macOS 与 Android 聚焦高频捕捉与轻量回看。
 
 ---
 
 ## 四、本地开发环境就绪
 
 ### 1. 后端中枢 (Backend)
-- **环境依赖**：Go 1.22 及以上版本。
+- **环境依赖**：Go 1.27 及以上版本（`go.mod` 当前声明 `1.27.1`）。
 - **本地启动**：
   ```bash
   cd backend
@@ -84,7 +105,7 @@
   ```
 
 ### 2. Web 展厅端 (Web)
-- **环境依赖**：Node.js 20+ 及 npm。
+- **环境依赖**：Node.js `^20.19.0 || >=22.12.0`（Vite 8 的最低要求）及 npm。
 - **本地启动**：
   ```bash
   cd web
@@ -106,7 +127,7 @@
   ```
 
 ### 4. Android 随行端 (Android)
-- **环境依赖**：JDK 17，Android SDK 35。
+- **环境依赖**：JDK 17，Android SDK 35（`minSdk 26`）。
 - **编译与验证**：
   ```bash
   cd android
@@ -145,7 +166,7 @@
   - `docs`: 仅限文档变更
   - `test`: 增加或修正单元测试
   - `chore`: 构建配置、依赖或工具链调整
-- **Scope（作用域）**：明确受影响的子系统（如 `backend`, `web`, `mac`, `android`, `stream`, `ledger` 等）。
+- **Scope（作用域）**：明确受影响的子系统（如 `backend`, `web`, `mac`, `android`, `auth`, `storage`, `stream`, `ledger`, `docs` 等）。
 - **Subject（简述）**：用克制、精准的中文简述修改，末尾不加句号，**严禁添加任何 Emoji**。
 - **示例**：
   - `feat(ledger): 支持信贷渠道独立还款日追踪`
@@ -161,12 +182,14 @@
 1. **已关联 Issue**：说明本次变更解决的具体问题或关联的议题编号。
 2. **本地测试与门禁全绿**：针对目标模块运行完整的单元测试和构建命令，确保 CI 零失败。
 3. **无硬编码与无浮点金额**：检查涉及金额计算处是否全链路采用 `cents`（分）；检查 UI 是否使用了语义设计令牌。
-4. **无未清理的代码遗留**：无注掉的大段死代码、无调试用的 `console.log` / `println`、无未清理的临时兼容分支。
+4. **无未清理的代码遗留**：无注掉的大段死代码、无调试用的 `console.log` / `println`、无未清理的临时兼容分支、无无消费者的冗余字段。
 5. **符合零 Emoji 规范**：检查 PR 标题、描述正文与所有修改代码中均无 Emoji。
+6. **文档同步到位**：若改动触及实体字段、枚举语义、接口契约或目录结构，须在同一次改动中同步 [`docs`](https://github.com/Losse-Leaf/docs) 对应专著。
 
 ---
 
 ## 七、交流与支持
 
 - 若发现软件缺陷，请使用 [**Bug Report 模版**](https://github.com/Losse-Leaf/.github/issues/new?template=bug_report.yml) 提交议题。
-- 若有新的设计思考或功能提议，请先在 [**GitHub Discussions**](https://github.com/orgs/Losse-Leaf/discussions) 发起探讨，以便充分评估其与《散页》核心美学的契合度。
+- 若有新的设计思考或功能提议，请先使用 [**特性提议模版**](https://github.com/Losse-Leaf/.github/issues/new?template=feature_request.yml) 提交公开探讨，以便充分评估其与《散页》核心美学的契合度。
+- 若遇到配置、登录或同步问题，请先查阅 [**支持中心 (SUPPORT.md)**](https://github.com/Losse-Leaf/.github/blob/main/SUPPORT.md)。

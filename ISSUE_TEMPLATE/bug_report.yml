@@ -18,6 +18,7 @@ body:
         - "Web 官方展厅 (Web - Vue 3 / Vite)"
         - "macOS 桌面工作台 (macOS - SwiftUI)"
         - "Android 随行端 (Android - Jetpack Compose)"
+        - "统一认证与登录 (Auth - Vesper Auth / 设备配对)"
         - "全平台文档与规范 (Docs)"
         - "其他 / 跨端协同 (Cross-Platform)"
     validations:
@@ -26,8 +27,8 @@ body:
     id: version
     attributes:
       label: 软件版本与构建号 (Version / Build)
-      description: 例如：Android v1.8.4 (build 47) / macOS v2.4.2 / Backend v1.5.1
-      placeholder: "例如: Android v1.8.4 (build 47)"
+      description: 例如：Android v2.3.2 / macOS v3.1.1 / Backend v2.2.1 / Web v2.2.1
+      placeholder: "例如: Android v2.3.2 (build 74)"
     validations:
       required: true
   - type: input

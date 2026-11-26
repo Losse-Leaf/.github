@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 社区讨论区 (Discussions)
-    url: https://github.com/orgs/Losse-Leaf/discussions
-    about: 欢迎在此交流使用体会、生活手账装订心得或通用技术探讨
   - name: 全平台专著文档 (Documentation)
     url: https://github.com/Losse-Leaf/docs
     about: 查阅生态蓝图、跨端设计系统、接口规范与故障排除手册
+  - name: 特性与设计提议 (Proposal)
+    url: https://github.com/Losse-Leaf/.github/issues/new?template=feature_request.yml
+    about: 提出契合《散页》克制美学的功能或设计构想
+  - name: 贡献指南 (Contributing)
+    url: https://github.com/Losse-Leaf/.github/blob/main/CONTRIBUTING.md
+    about: 了解开发流程、十大核心约定与提交要求

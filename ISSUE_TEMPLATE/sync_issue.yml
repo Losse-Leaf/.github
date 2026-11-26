@@ -1,12 +1,12 @@
-name: 数据同步与设备配对问题 (Sync & Pairing Issue)
-description: 反馈多端数据同步延迟、发件箱事件积压或设备扫码配对异常
+name: 数据同步与设备接入问题 (Sync & Pairing Issue)
+description: 反馈多端设备接入异常、数据同步延迟或发件箱事件积压
 title: "[Sync]: "
 labels: ["sync", "network", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        本模版专门用于诊断多端受信任设备配对、离线发件箱同步（Outbox）或游标对齐故障。
+        本模版专门用于诊断多端设备接入（统一认证通行证 / 局域网认领码 / 配对工单深链接）、离线发件箱同步（Outbox）或游标对齐故障。
         请注意：描述中严禁使用任何 Emoji 表情符号。
   - type: dropdown
     id: client_type
@@ -19,18 +19,30 @@ body:
         - "多端相互冲突"
     validations:
       required: true
+  - type: dropdown
+    id: pair_channel
+    attributes:
+      label: 接入通道 (Pairing Channel)
+      description: 出现异常时，该设备是通过哪条通道完成入网的
+      options:
+        - "统一认证通行证 (Vesper Auth OIDC + 深链接回执)"
+        - "局域网一次性认领码 (首台设备)"
+        - "配对工单深链接 (looseleaf://)"
+        - "已完成入网，仅同步异常"
+    validations:
+      required: true
   - type: input
     id: backend_version
     attributes:
       label: 后端中枢版本 (Backend Version)
-      placeholder: "例如: v1.5.1"
+      placeholder: "例如: v2.2.1"
     validations:
       required: true
   - type: input
     id: network_topology
     attributes:
       label: 网络环境拓扑 (Network Topology)
-      description: 例如：同一局域网 Wi-Fi 直连 / Tailscale 异地组网 / 公网 HTTPS + Cloudflare
+      description: 例如：同一局域网 Wi-Fi 直连 / Tailscale 异地组网 / 生产主域 https://leaf.starryheavens.uk + Cloudflare
       placeholder: "例如: 公网 HTTPS (反向代理 :443 -> :8088)"
     validations:
       required: true
@@ -45,7 +57,7 @@ body:
     id: diagnostic_info
     attributes:
       label: 诊断信息或日志 (Diagnostic Logs)
-      description: 移动端「展台」中的待同步计数、Logcat 过滤标签或后端日志
+      description: 移动端顶栏「同步异常 N 项」入口中的待同步计数、Logcat 过滤标签或后端日志
       render: text
   - type: checkboxes
     id: checklist
@@ -54,5 +66,5 @@ body:
       options:
         - label: 我已确认报告内容严格遵守零 Emoji 规范
           required: true
-        - label: 我已确认配对二维码未超过 5 分钟有效时限
+        - label: 我已确认配对凭据仍在有效期内（统一认证配对工单 90 秒有效，超时需重新发起接入）
           required: true
